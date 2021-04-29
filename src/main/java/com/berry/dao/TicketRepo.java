@@ -1,11 +1,14 @@
 package com.berry.dao;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.berry.DTO.CreateTicketDTO;
 import com.berry.app.Application;
+import com.berry.exception.NotFoundException;
 import com.berry.model.Reimbursement;
 import com.berry.model.Status;
 import com.berry.model.StatusEnum;
@@ -41,6 +44,26 @@ public class TicketRepo {
 		} finally {
 			session.close();
 		}		
+		
+		return ticket;
+	}
+
+	public Reimbursement getTicketById(Users user, int id) throws NotFoundException {
+		Session session = SessionUtility.getSession().openSession();
+		
+		Reimbursement ticket = new Reimbursement();
+		String hql = "From Reimbursement r WHERE r.author_id = :authorid AND r.reimb_id = :reimbid";
+	
+		try {
+			ticket = (Reimbursement) session.createQuery(hql)
+					.setParameter("authorid", user)
+					.setParameter("reimbid", id)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			throw new NotFoundException("Ticket Not Found");
+		} finally {
+			session.close();
+		}
 		
 		return ticket;
 	}

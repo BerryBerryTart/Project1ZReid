@@ -41,11 +41,11 @@ public class Reimbursement {
 	
 	@ManyToOne
 	@JoinColumn(name = "author_id", referencedColumnName = "user_id")
-	private Users author;
+	private Users author_id;
 	
 	@ManyToOne
 	@JoinColumn(name = "resolver_id", referencedColumnName = "user_id")
-	private Users resolver;
+	private Users resolver_id;
 	
 	@OneToOne
 	@JoinColumn(name = "status_id", referencedColumnName = "status_id")
@@ -63,8 +63,8 @@ public class Reimbursement {
 		this.amount = amount;
 		this.resolved = resolved;
 		this.description = description;
-		this.author = author;
-		this.resolver = resolver;
+		this.author_id = author;
+		this.resolver_id = resolver;
 		this.status_id = status_id;
 		this.type_id = type_id;
 	}
@@ -110,19 +110,19 @@ public class Reimbursement {
 	}
 
 	public Users getAuthor() {
-		return author;
+		return author_id;
 	}
 
-	public void setAuthor(Users author) {
-		this.author = author;
+	public void setAuthor(Users author_id) {
+		this.author_id = author_id;
 	}
 
 	public Users getResolver() {
-		return resolver;
+		return resolver_id;
 	}
 
-	public void setResolver(Users resolver) {
-		this.resolver = resolver;
+	public void setResolver(Users resolver_id) {
+		this.resolver_id = resolver_id;
 	}
 
 	public Status getStatus_id() {

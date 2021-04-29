@@ -36,17 +36,37 @@ public class TicketController implements Controller  {
 	};
 	
 	private Handler getAllTicketsHandler = (ctx) -> {
-
+		Users user = (Users) ctx.sessionAttribute("currentlyLoggedInUser");		
+		if (user == null) {
+			ctx.json(ResponseMap.getResMap("Error", "User Is Not Logged In."));
+			ctx.status(400);
+		} else {		
+			
+		}
 	};
 	
 	private Handler getTicketByIdHandler = (ctx) -> {
-
+		Users user = (Users) ctx.sessionAttribute("currentlyLoggedInUser");		
+		if (user == null) {
+			ctx.json(ResponseMap.getResMap("Error", "User Is Not Logged In."));
+			ctx.status(400);
+		} else {		
+			Reimbursement ticket = null;
+			String stringTicketID = ctx.pathParam("id");
+			
+			ticket = ticketService.getTicketById(user, stringTicketID);
+			
+			if (ticket != null) {
+				ctx.json(ticket);
+				ctx.status(201);
+			}
+		}
 	};
 	
 	//ADMIN PRIVS
 	
 	private Handler adminViewAllTicketsHandler = (ctx) -> {
-
+		
 	};
 	
 	private Handler adminViewTicketByIdHandler = (ctx) -> {
