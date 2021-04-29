@@ -8,3 +8,4 @@ db.ini
 .classpath
 main.js
 /src/main/resources/static/
+hibernate.cfg.xml

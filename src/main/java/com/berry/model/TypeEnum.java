@@ -13,6 +13,21 @@ public enum TypeEnum {
 		this.index = index;
 	}
 	
+	public static TypeEnum getEnum(String type) {
+		TypeEnum returnType = null;
+		switch(type.toLowerCase()) {
+			case "buisness":
+				returnType = BUISNESS;
+				break;
+			case "relocation":
+				returnType = RELOCATION;
+				break;
+			default:
+				return OTHER;
+		}		
+		return returnType;
+	}
+	
 	public int getIndex() {
 		return index;
 	}

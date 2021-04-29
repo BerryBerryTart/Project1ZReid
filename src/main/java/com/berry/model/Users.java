@@ -5,6 +5,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -23,6 +25,7 @@ public class Users {
 	@Column(name = "username", length = 50, unique = true)
 	private String username;
 	
+	@JsonIgnore
 	@Column(name = "password", length = 50)
 	private String password;
 	

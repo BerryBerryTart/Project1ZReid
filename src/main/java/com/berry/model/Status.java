@@ -7,8 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Proxy;
+
 @Entity
 @Table(name = "ers_reimbursement_status")
+@Proxy(lazy = false)
 public class Status {
 	
 	@Id
@@ -18,6 +21,8 @@ public class Status {
 	
 	@Column(name = "status", length = 10)
 	private String status;
+	
+	public Status() {}
 
 	public Status(int status_id, String status) {
 		this.status_id = status_id;

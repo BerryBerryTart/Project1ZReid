@@ -2,7 +2,6 @@ package com.berry.controller;
 
 import com.berry.DTO.CreateUserDTO;
 import com.berry.DTO.LoginDTO;
-import com.berry.exception.BadParameterException;
 import com.berry.model.Role;
 import com.berry.model.Users;
 import com.berry.service.LoginService;
@@ -29,12 +28,8 @@ public class LoginController implements Controller {
 	private Handler registerUserHandler = (ctx) -> {
 		CreateUserDTO createUserDTO = new CreateUserDTO();
 		
-		try {
-			createUserDTO = ctx.bodyAsClass(CreateUserDTO.class);
-		} catch (Exception e) {
-			throw new BadParameterException(e.getMessage());
-		}
-		
+		createUserDTO = ctx.bodyAsClass(CreateUserDTO.class);
+			
 		Users user = loginService.registerUser(createUserDTO);
 		
 		if (user != null) {

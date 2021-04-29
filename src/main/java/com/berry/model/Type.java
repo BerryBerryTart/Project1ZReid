@@ -7,8 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Proxy;
+
 @Entity
 @Table(name = "ers_reimbursement_type")
+@Proxy(lazy = false)
 public class Type {
 	
 	@Id
@@ -19,6 +22,8 @@ public class Type {
 	@Column(name = "type", length = 10)
 	private String type;	
 
+	public Type() {}
+	
 	public Type(int type_id, String type) {
 		this.type_id = type_id;
 		this.type = type;

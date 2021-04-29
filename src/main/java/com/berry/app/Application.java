@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.berry.controller.Controller;
 import com.berry.controller.ExceptionController;
 import com.berry.controller.LoginController;
+import com.berry.controller.TicketController;
 import com.berry.exception.DatabaseInitException;
 import com.berry.util.PopulateTables;
 
@@ -40,7 +41,7 @@ public class Application {
 			logger.info(httpMethod + " request to endpoint '" + URI + "' received");
 		});
 		
-		mapControllers(new LoginController(), new ExceptionController());
+		mapControllers(new ExceptionController(), new LoginController(), new TicketController());
 		
 		app.start(5000);
 		

@@ -1,12 +1,38 @@
 package com.berry.controller;
 
+import com.berry.DTO.CreateTicketDTO;
+import com.berry.model.Reimbursement;
+import com.berry.model.Users;
+import com.berry.service.TicketService;
+
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
-public class ReimbursementController implements Controller  {
+public class TicketController implements Controller  {
+	private TicketService ticketService;
+	
+	public TicketController() {
+		this.ticketService = new TicketService();
+	}
 	
 	private Handler addTicketHandler = (ctx) -> {
-
+		Users user = (Users) ctx.sessionAttribute("currentlyLoggedInUser");		
+		if (user == null) {
+			ctx.json(ResponseMap.getResMap("Error", "User Is Not Logged In."));
+			ctx.status(400);
+		} else {		
+			Reimbursement ticket = null;		
+			CreateTicketDTO createTicketDTO = new CreateTicketDTO();		
+			createTicketDTO = ctx.bodyAsClass(CreateTicketDTO.class);
+			
+			ticket = ticketService.CreateTicket(user, createTicketDTO);
+			
+			if (ticket != null) {
+				ctx.json(ticket);
+				ctx.status(201);
+			}
+		}
+		
 	};
 	
 	private Handler getAllTicketsHandler = (ctx) -> {

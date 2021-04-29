@@ -9,7 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "ers_reimbursement")
@@ -21,12 +26,13 @@ public class Reimbursement {
 	private int reimb_id;
 	
 	@Column(name = "amount")
-	private int amount;
+	private double amount;
 	
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "submitted")
 	private Date submitted;
-	
+
 	@Column(name = "resolved")
 	private Date resolved;
 	
@@ -34,18 +40,18 @@ public class Reimbursement {
 	private String description;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = "author_id", referencedColumnName = "user_id")
 	private Users author;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = "resolver_id", referencedColumnName = "user_id")
 	private Users resolver;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "status_id", referencedColumnName = "status_id")
 	private Status status_id;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "type_id", referencedColumnName = "type_id")
 	private Type type_id;
 	
@@ -71,11 +77,11 @@ public class Reimbursement {
 		this.reimb_id = reimb_id;
 	}
 
-	public int getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
