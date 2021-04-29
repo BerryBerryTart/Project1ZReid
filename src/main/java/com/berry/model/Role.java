@@ -7,8 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Proxy;
+
 @Entity
 @Table(name = "ers_users_role")
+@Proxy(lazy = false)
 public class Role {
 	
 	@Id
@@ -16,8 +19,15 @@ public class Role {
 	@Column(name = "role_id")
 	private int role_id;
 	
-	@Column(name = "role", length = 10)
+	@Column(name = "role", length = 10, unique = true)
 	private String role;
+	
+	public Role() {}
+
+	public Role(int role_id, String role) {
+		this.role_id = role_id;
+		this.role = role;
+	}
 
 	public int getRole_id() {
 		return role_id;

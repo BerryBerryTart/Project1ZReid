@@ -19,6 +19,11 @@ public class Status {
 	@Column(name = "status", length = 10)
 	private String status;
 
+	public Status(int status_id, String status) {
+		this.status_id = status_id;
+		this.status = status;
+	}
+
 	public int getStatus_id() {
 		return status_id;
 	}

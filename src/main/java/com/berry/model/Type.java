@@ -17,7 +17,12 @@ public class Type {
 	private int type_id;
 	
 	@Column(name = "type", length = 10)
-	private String type;
+	private String type;	
+
+	public Type(int type_id, String type) {
+		this.type_id = type_id;
+		this.type = type;
+	}
 
 	public int getType_id() {
 		return type_id;

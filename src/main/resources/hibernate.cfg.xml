@@ -6,7 +6,6 @@
 	<session-factory>
 		<!-- JDBC database connection settings -->
 		<property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mariadb://localhost:3301/</property>
 		
 		<!-- SQL Dialect -->
 		<property name="hibernate.dialect">org.hibernate.dialect.MariaDB103Dialect</property>

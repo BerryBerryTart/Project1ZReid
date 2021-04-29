@@ -4,9 +4,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
@@ -19,7 +20,7 @@ public class Users {
 	@Column(name = "user_id")
 	private int users_id;	
 	
-	@Column(name = "username", unique = true, length = 50)
+	@Column(name = "username", length = 50, unique = true)
 	private String username;
 	
 	@Column(name = "password", length = 50)
@@ -31,12 +32,15 @@ public class Users {
 	@Column(name = "last_name", length = 100)
 	private String last_name;
 	
-	@Column(name = "email", unique = true, length = 150)
+	@Column(name = "email", length = 150, unique = true)
 	private String email;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	//TODO: keep an eye on this one
+	@OneToOne (cascade= {CascadeType.PERSIST})
 	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
 	private Role role_id;
+	
+	public Users() {}
 
 	public Users(String username, String password, String first_name, String last_name, String email) {
 		super();

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -32,17 +33,23 @@ public class Reimbursement {
 	@Column(name = "description", length = 250)
 	private String description;
 	
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
 	private Users author;
 	
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
 	private Users resolver;
 	
+	@ManyToOne
 	@JoinColumn(name = "status_id", referencedColumnName = "status_id")
 	private Status status_id;
 	
+	@ManyToOne
 	@JoinColumn(name = "type_id", referencedColumnName = "type_id")
 	private Type type_id;
+	
+	public Reimbursement() {}
 
 	public Reimbursement(int amount, Date resolved, String description, Users author, Users resolver, Status status_id,
 			Type type_id) {
