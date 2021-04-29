@@ -1,5 +1,6 @@
 package com.berry.controller;
 
+import com.berry.exception.BadParameterException;
 import com.berry.exception.CreationException;
 import com.berry.exception.NotFoundException;
 
@@ -14,6 +15,8 @@ public class ExceptionController implements Controller {
 		app.exception(NotFoundException.class, (e, ctx) -> {
 			ctx.json(ResponseMap.getResMap("Error", e.getMessage()));
 		});
-		
+		app.exception(BadParameterException.class, (e, ctx) -> {
+			ctx.json(ResponseMap.getResMap("Error", e.getMessage()));
+		});		
 	}
 }

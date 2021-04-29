@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.berry.DTO.CreateTicketDTO;
+import com.berry.DTO.TicketStatusDTO;
 import com.berry.dao.TicketRepo;
 import com.berry.exception.BadParameterException;
 import com.berry.exception.NotFoundException;
@@ -38,7 +39,7 @@ public class TicketService {
 		Reimbursement ticket = null;
 		
 		try {
-			int id = Integer.parseInt(stringTicketID);			
+			int id = Integer.parseInt(stringTicketID);
 			ticket = ticketRepo.getUserTicketById(user, id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException("Param must be an integer.");
@@ -59,12 +60,49 @@ public class TicketService {
 		return tickets;
 	}
 
-	public List<Reimbursement> getAllAdminTickets(Users user) throws NotFoundException {
+	public List<Reimbursement> getAllAdminTickets() throws NotFoundException {
 		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
 		
-		tickets = ticketRepo.getAllAdminTickets(user);
+		tickets = ticketRepo.getAllAdminTickets();
 		
 		return tickets;
+	}
+
+	public Reimbursement getAdminTicketById(String stringTicketID) throws BadParameterException, ServiceLayerException, NotFoundException {
+		Reimbursement ticket = null;
+		
+		try {
+			int id = Integer.parseInt(stringTicketID);
+			ticket = ticketRepo.getAdminTicketById(id);
+		} catch (NumberFormatException e) {
+			throw new BadParameterException("Param must be an integer.");
+		}
+		
+		if (ticket == null) {
+			throw new ServiceLayerException("Service Layer Error");
+		}
+		
+		return ticket;
+	}
+
+	public Reimbursement updateAdminTicketById(String stringTicketID, Users user, TicketStatusDTO ticketStatusDTO) throws BadParameterException, ServiceLayerException, NotFoundException {
+		Reimbursement ticket = null;
+		if (ticketStatusDTO.noFieldEmpty() == false) {
+			throw new BadParameterException("All Fields Are Required");
+		} else if (ticketStatusDTO.fieldsAreValid() == false) {
+			throw new BadParameterException("'" + ticketStatusDTO.getStatus() + "' Is Not A Valid Status");
+		}
+		try {
+			int id = Integer.parseInt(stringTicketID);
+			ticket = ticketRepo.updateAdminTicketById(id, user, ticketStatusDTO);
+		} catch (NumberFormatException e) {
+			throw new BadParameterException("Param must be an integer.");
+		}
+		
+		if (ticket == null) {
+			throw new ServiceLayerException("Service Layer Error");
+		}		
+		return ticket;
 	}
 	
 	

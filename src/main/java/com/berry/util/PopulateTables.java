@@ -46,6 +46,8 @@ public class PopulateTables {
 		statuses.add(pendingStatus);
 		Status completedStatus = new Status(StatusEnum.COMPLETED.getIndex(), StatusEnum.COMPLETED.toString());
 		statuses.add(completedStatus);
+		Status rejectedStatus = new Status(StatusEnum.REJECTED.getIndex(), StatusEnum.REJECTED.toString());
+		statuses.add(rejectedStatus);
 		
 		for (Status s : statuses) {
 			if (session.get(Status.class, s.getStatus_id()) == null) {

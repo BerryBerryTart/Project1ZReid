@@ -3,7 +3,8 @@ package com.berry.model;
 public enum StatusEnum {
 
 	PENDING(1, "PENDING"), 
-	COMPLETED(2, "COMPLETED");
+	COMPLETED(2, "COMPLETED"),
+	REJECTED(3, "REJECTED");
 	
 	private int index;
 	private String text;
@@ -21,4 +22,19 @@ public enum StatusEnum {
     public String toString() {
         return text;
     }
+
+	public static StatusEnum getStatusFromString(String status) {
+		StatusEnum returnType = null;
+		
+		switch(status.toLowerCase()) {
+			case "completed":
+				returnType = COMPLETED;
+				break;
+			case "rejected":
+				returnType = REJECTED;
+				break;
+		}
+		
+		return returnType;
+	}
 }
