@@ -7,7 +7,6 @@ import com.berry.controller.Controller;
 import com.berry.controller.ExceptionController;
 import com.berry.controller.LoginController;
 import com.berry.controller.TicketController;
-import com.berry.exception.DatabaseInitException;
 import com.berry.util.PopulateTables;
 
 import io.javalin.Javalin;
@@ -26,8 +25,6 @@ public class Application {
 		
 		try {
 			PopulateTables.populate();
-		} catch (DatabaseInitException e) {
-			logger.info("Tables Already Initialised");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			System.exit(-1);

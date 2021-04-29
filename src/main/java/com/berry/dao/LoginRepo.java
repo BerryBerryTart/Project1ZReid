@@ -3,7 +3,6 @@ package com.berry.dao;
 import javax.persistence.NoResultException;
 
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +20,25 @@ public class LoginRepo {
 	
 	public Users createUser(CreateUserDTO createUserDTO) throws CreationException {
 		Session session = SessionUtility.getSession().openSession();
-		
 		Users user = null;
-		Role role = session.load(Role.class, 1);		
+		boolean userExistsAlready = true;
+		
+		String hql = "FROM Users u WHERE u.username = :username AND u.email = :email";
+		try {
+			user = (Users) session.createQuery(hql)
+				.setParameter("username", createUserDTO.getUsername())
+				.setParameter("email", createUserDTO.getEmail())
+				.getSingleResult();
+		} catch (NoResultException e) {
+			userExistsAlready = false;
+		}
+		
+		if (userExistsAlready == true) {
+			logger.error("Username/Email Already Exists");
+			throw new CreationException("Username/Email Already Exists");
+		}
+		
+		Role role = session.load(Role.class, 1);
 		
 		session.beginTransaction();
 		user = new Users();
@@ -33,21 +48,15 @@ public class LoginRepo {
 		user.setUsername(createUserDTO.getUsername());
 		user.setPassword(createUserDTO.getPassword());
 		user.setRole_id(role);
-		try {
-			session.save(user);
-			session.getTransaction().commit();			
-			
-		} catch (ConstraintViolationException e) {
-			logger.error("Duplicate Key" + e.getMessage());
-			throw new CreationException("Duplicate Key: " + e.getMessage());
-		} finally {
-			session.close();
-		}		
+		session.save(user);
+		
+		session.getTransaction().commit();
+		session.close();
 		
 		return user;
 	}
 
-	public Users loginUser(LoginDTO loginDTO) throws NotFoundException {		
+	public Users loginUser(LoginDTO loginDTO) throws NotFoundException {
 		Session session = SessionUtility.getSession().openSession();
 		
 		Users user = null;
@@ -59,6 +68,7 @@ public class LoginRepo {
 				.setParameter("password", loginDTO.getPassword())
 				.getSingleResult();
 		} catch (NoResultException e) {
+			logger.error("User DNE");
 			throw new NotFoundException("User Not Found");
 		} finally {
 			session.close();

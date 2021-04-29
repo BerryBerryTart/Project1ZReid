@@ -19,7 +19,7 @@ public class Type {
 	@Column(name = "type_id")
 	private int type_id;
 	
-	@Column(name = "type", length = 10)
+	@Column(name = "type", length = 10, unique = true)
 	private String type;	
 
 	public Type() {}

@@ -19,7 +19,7 @@ public class Status {
 	@Column(name = "status_id")
 	private int status_id;
 	
-	@Column(name = "status", length = 10)
+	@Column(name = "status", length = 10, unique = true)
 	private String status;
 	
 	public Status() {}

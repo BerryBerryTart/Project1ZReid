@@ -1,5 +1,8 @@
 package com.berry.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.NoResultException;
 
 import org.hibernate.Session;
@@ -48,7 +51,7 @@ public class TicketRepo {
 		return ticket;
 	}
 
-	public Reimbursement getTicketById(Users user, int id) throws NotFoundException {
+	public Reimbursement getUserTicketById(Users user, int id) throws NotFoundException {
 		Session session = SessionUtility.getSession().openSession();
 		
 		Reimbursement ticket = new Reimbursement();
@@ -66,6 +69,34 @@ public class TicketRepo {
 		}
 		
 		return ticket;
+	}
+
+	public List<Reimbursement> getAllUserTickets(Users user) throws NotFoundException {
+		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
+		Session session = SessionUtility.getSession().openSession();
+		
+		String hql = "From Reimbursement r WHERE r.author_id = :authorid";
+		
+		try {
+			tickets = session.createQuery(hql, Reimbursement.class).setParameter("authorid", user).getResultList();
+		} catch (NoResultException e) {
+			throw new NotFoundException("Ticket Not Found");
+		} finally {
+			session.close();
+		}
+		
+		return tickets;
+	}
+
+	public List<Reimbursement> getAllAdminTickets(Users user) {
+		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
+		Session session = SessionUtility.getSession().openSession();
+		
+		String hql = "From Reimbursement r";
+		
+		tickets = session.createQuery(hql, Reimbursement.class).getResultList();
+		
+		return tickets;
 	}
 
 }

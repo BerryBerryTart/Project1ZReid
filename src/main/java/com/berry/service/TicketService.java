@@ -1,5 +1,8 @@
 package com.berry.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.berry.DTO.CreateTicketDTO;
 import com.berry.dao.TicketRepo;
 import com.berry.exception.BadParameterException;
@@ -31,12 +34,12 @@ public class TicketService {
 		return ticket;
 	}
 
-	public Reimbursement getTicketById(Users user, String stringTicketID) throws BadParameterException, ServiceLayerException, NotFoundException {
+	public Reimbursement getUserTicketById(Users user, String stringTicketID) throws BadParameterException, ServiceLayerException, NotFoundException {
 		Reimbursement ticket = null;
 		
 		try {
 			int id = Integer.parseInt(stringTicketID);			
-			ticket = ticketRepo.getTicketById(user, id);
+			ticket = ticketRepo.getUserTicketById(user, id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException("Param must be an integer.");
 		}
@@ -46,6 +49,22 @@ public class TicketService {
 		}
 		
 		return ticket;
+	}
+
+	public List<Reimbursement> getAllUserTickets(Users user) throws NotFoundException {
+		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
+		
+		tickets = ticketRepo.getAllUserTickets(user);
+		
+		return tickets;
+	}
+
+	public List<Reimbursement> getAllAdminTickets(Users user) throws NotFoundException {
+		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
+		
+		tickets = ticketRepo.getAllAdminTickets(user);
+		
+		return tickets;
 	}
 	
 	
