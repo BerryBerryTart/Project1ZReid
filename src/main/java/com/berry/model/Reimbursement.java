@@ -39,6 +39,9 @@ public class Reimbursement {
 	@Column(name = "description", length = 250)
 	private String description;
 	
+	@Column(name = "receipt", columnDefinition = "LONGBLOB")
+	private byte[] receipt;
+	
 	@ManyToOne
 	@JoinColumn(name = "author_id", referencedColumnName = "user_id")
 	private Users author_id;
@@ -109,6 +112,14 @@ public class Reimbursement {
 		this.description = description;
 	}
 
+	public byte[] getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(byte[] receipt) {
+		this.receipt = receipt;
+	}
+
 	public Users getAuthor() {
 		return author_id;
 	}
@@ -140,5 +151,4 @@ public class Reimbursement {
 	public void setType_id(Type type_id) {
 		this.type_id = type_id;
 	}	
-	
 }

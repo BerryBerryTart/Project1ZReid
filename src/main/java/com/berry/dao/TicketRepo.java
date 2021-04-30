@@ -39,6 +39,7 @@ public class TicketRepo {
 			
 			ticket.setAmount(createTicketDTO.getAmount());
 			ticket.setDescription(createTicketDTO.getDescription());
+			ticket.setReceipt(createTicketDTO.getReceipt());
 			ticket.setType_id(type);
 			ticket.setAuthor(user);
 			ticket.setStatus_id(status);
