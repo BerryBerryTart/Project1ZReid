@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.berry.DTO.CreateTicketDTO;
 import com.berry.DTO.TicketStatusDTO;
+import com.berry.app.Application;
 import com.berry.model.Reimbursement;
 import com.berry.model.Role;
 import com.berry.model.RoleEnum;
@@ -18,6 +22,7 @@ import io.javalin.http.Handler;
 
 public class TicketController implements Controller  {
 	private TicketService ticketService;
+	private static Logger logger = LoggerFactory.getLogger(Application.class);
 	
 	public TicketController() {
 		this.ticketService = new TicketService();
@@ -31,13 +36,18 @@ public class TicketController implements Controller  {
 		} else {
 			Reimbursement ticket = null;
 			CreateTicketDTO createTicketDTO = new CreateTicketDTO();
-			createTicketDTO = ctx.bodyAsClass(CreateTicketDTO.class);
-			
-			ticket = ticketService.CreateTicket(user, createTicketDTO);
-			
-			if (ticket != null) {
-				ctx.json(ticket);
-				ctx.status(201);
+			try {
+				createTicketDTO = ctx.bodyAsClass(CreateTicketDTO.class);
+				
+				ticket = ticketService.CreateTicket(user, createTicketDTO);
+				
+				if (ticket != null) {
+					ctx.json(ticket);
+					ctx.status(201);
+				}
+			} catch (Exception e) {
+				logger.error("Invalid Serialisation");
+				ctx.status(400);
 			}
 		}
 		
@@ -149,14 +159,20 @@ public class TicketController implements Controller  {
 			} else {
 				Reimbursement ticket = null;
 				String stringTicketID = ctx.pathParam("id");
-				TicketStatusDTO ticketStatusDTO = ctx.bodyAsClass(TicketStatusDTO.class);
-				
-				ticket = ticketService.updateAdminTicketById(stringTicketID, user, ticketStatusDTO);
-				
-				if (ticket != null) {
-					ctx.json(ticket);
-					ctx.status(201);
+				try {
+					TicketStatusDTO ticketStatusDTO = ctx.bodyAsClass(TicketStatusDTO.class);
+					
+					ticket = ticketService.updateAdminTicketById(stringTicketID, user, ticketStatusDTO);
+					
+					if (ticket != null) {
+						ctx.json(ticket);
+						ctx.status(201);
+					}
+				} catch (Exception e) {
+					logger.error("Invalid Serialisation");
+					ctx.status(400);
 				}
+				
 			}
 		}
 	};
