@@ -4,6 +4,7 @@ public class CreateTicketDTO implements DTO{
 	private double amount;
 	private String description;
 	private String type;
+	private byte[] receipt;
 	
 	public CreateTicketDTO() {}
 
@@ -11,6 +12,13 @@ public class CreateTicketDTO implements DTO{
 		this.amount = amount;
 		this.description = description;
 		this.type = type;
+	}
+	
+	public CreateTicketDTO(double amount, String description, String type, byte[] receipt) {
+		this.amount = amount;
+		this.description = description;
+		this.type = type;
+		this.receipt = receipt;
 	}
 
 	@Override
@@ -21,8 +29,7 @@ public class CreateTicketDTO implements DTO{
 			return false;
 		} else if (this.type == null || this.type.trim().equals("") == true) {
 			return false;
-		}
-		
+		}		
 		return true;
 	}
 	
@@ -48,5 +55,13 @@ public class CreateTicketDTO implements DTO{
 	
 	public void setType(String type) {
 		this.type = type;
-	}	
+	}
+
+	public byte[] getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(byte[] receipt) {
+		this.receipt = receipt;
+	}
 }

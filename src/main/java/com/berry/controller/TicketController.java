@@ -5,12 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.berry.DTO.CreateTicketDTO;
 import com.berry.DTO.TicketStatusDTO;
-import com.berry.app.Application;
 import com.berry.model.Reimbursement;
 import com.berry.model.Role;
 import com.berry.model.RoleEnum;
@@ -22,7 +18,6 @@ import io.javalin.http.Handler;
 
 public class TicketController implements Controller  {
 	private TicketService ticketService;
-	private static Logger logger = LoggerFactory.getLogger(Application.class);
 	
 	public TicketController() {
 		this.ticketService = new TicketService();
@@ -36,19 +31,16 @@ public class TicketController implements Controller  {
 		} else {
 			Reimbursement ticket = null;
 			CreateTicketDTO createTicketDTO = new CreateTicketDTO();
-			try {
-				createTicketDTO = ctx.bodyAsClass(CreateTicketDTO.class);
-				
-				ticket = ticketService.CreateTicket(user, createTicketDTO);
-				
-				if (ticket != null) {
-					ctx.json(ticket);
-					ctx.status(201);
-				}
-			} catch (Exception e) {
-				logger.error("Invalid Serialisation");
-				ctx.status(400);
+			
+			createTicketDTO = ctx.bodyAsClass(CreateTicketDTO.class);
+			
+			ticket = ticketService.CreateTicket(user, createTicketDTO);
+			
+			if (ticket != null) {
+				ctx.json(ticket);
+				ctx.status(201);
 			}
+			
 		}
 		
 	};
@@ -159,25 +151,40 @@ public class TicketController implements Controller  {
 			} else {
 				Reimbursement ticket = null;
 				String stringTicketID = ctx.pathParam("id");
-				try {
-					TicketStatusDTO ticketStatusDTO = ctx.bodyAsClass(TicketStatusDTO.class);
-					
-					ticket = ticketService.updateAdminTicketById(stringTicketID, user, ticketStatusDTO);
-					
-					if (ticket != null) {
-						ctx.json(ticket);
-						ctx.status(201);
-					}
-				} catch (Exception e) {
-					logger.error("Invalid Serialisation");
-					ctx.status(400);
-				}
+			
+				TicketStatusDTO ticketStatusDTO = ctx.bodyAsClass(TicketStatusDTO.class);
 				
+				ticket = ticketService.updateAdminTicketById(stringTicketID, user, ticketStatusDTO);
+				
+				if (ticket != null) {
+					ctx.json(ticket);
+					ctx.status(201);
+				}
+			}
+		}
+	};
+	
+	private Handler fetchTicketBlob = (ctx) -> {
+		Users user = (Users) ctx.sessionAttribute("currentlyLoggedInUser");
+		
+		if (user == null) {
+			ctx.json(ResponseMap.getResMap("Error", "User Is Not Logged In."));
+			ctx.status(400);
+		} else {
+			String stringTicketID = ctx.pathParam("id");
+			byte[] ticketBlob = null;
+			
+			ticketBlob = ticketService.fetchTicketBlob(user, stringTicketID);
+			
+			if (ticketBlob != null) {
+				ctx.json(ticketBlob);
+				ctx.status(200);
 			}
 		}
 	};
 	
 	public void mapEndpoints(Javalin app) {
+		//USER PRIVS
 		app.post("/add_ticket", addTicketHandler);
 		app.get("/get_ticket_status/", getAllTicketsHandler);
 		app.get("/get_ticket_status/:id", getTicketByIdHandler);
@@ -186,5 +193,8 @@ public class TicketController implements Controller  {
 		app.get("/view_ticket", adminViewAllTicketsHandler);
 		app.get("/view_ticket/:id", adminViewTicketByIdHandler);
 		app.put("/update_ticket/:id", adminUpdateTicketHandler);
+		
+		//SELECTIVE PRIVS
+		app.get("/ticket_blob/:id", fetchTicketBlob);
 	}
 }

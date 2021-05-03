@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "ers_reimbursement")
 public class Reimbursement {
@@ -39,12 +41,16 @@ public class Reimbursement {
 	@Column(name = "description", length = 250)
 	private String description;
 	
+	@JsonIgnore
+	@Column(name = "receipt", columnDefinition = "LONGBLOB")
+	private byte[] receipt;
+	
 	@ManyToOne
-	@JoinColumn(name = "author_id", referencedColumnName = "user_id")
+	@JoinColumn(name = "author_id", referencedColumnName = "users_id")
 	private Users author_id;
 	
 	@ManyToOne
-	@JoinColumn(name = "resolver_id", referencedColumnName = "user_id")
+	@JoinColumn(name = "resolver_id", referencedColumnName = "users_id")
 	private Users resolver_id;
 	
 	@OneToOne
@@ -109,6 +115,14 @@ public class Reimbursement {
 		this.description = description;
 	}
 
+	public byte[] getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(byte[] receipt) {
+		this.receipt = receipt;
+	}
+
 	public Users getAuthor() {
 		return author_id;
 	}
@@ -140,5 +154,4 @@ public class Reimbursement {
 	public void setType_id(Type type_id) {
 		this.type_id = type_id;
 	}	
-	
 }
