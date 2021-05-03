@@ -7,6 +7,7 @@ import com.berry.DTO.CreateTicketDTO;
 import com.berry.DTO.TicketStatusDTO;
 import com.berry.dao.TicketRepo;
 import com.berry.exception.BadParameterException;
+import com.berry.exception.ImproperTypeException;
 import com.berry.exception.NotFoundException;
 import com.berry.exception.ServiceLayerException;
 import com.berry.model.Reimbursement;
@@ -19,7 +20,7 @@ public class TicketService {
 		this.ticketRepo = new TicketRepo();
 	}
 	
-	public Reimbursement CreateTicket(Users user, CreateTicketDTO createTicketDTO) throws BadParameterException, ServiceLayerException {
+	public Reimbursement CreateTicket(Users user, CreateTicketDTO createTicketDTO) throws BadParameterException, ServiceLayerException, ImproperTypeException {
 		Reimbursement ticket = null;
 		
 		if (createTicketDTO.noFieldEmpty() == false) {
@@ -103,6 +104,19 @@ public class TicketService {
 			throw new ServiceLayerException("Service Layer Error");
 		}		
 		return ticket;
+	}
+
+	public byte[] fetchTicketBlob(Users user, String stringTicketID) throws BadParameterException, NotFoundException {
+		byte[] ticketBlob = null;
+		
+		try {
+			int id = Integer.parseInt(stringTicketID);
+			ticketBlob = ticketRepo.fetchTicketBlob(user, id);
+		} catch (NumberFormatException e) {
+			throw new BadParameterException("Param must be an integer.");
+		}
+		
+		return ticketBlob;
 	}
 	
 	

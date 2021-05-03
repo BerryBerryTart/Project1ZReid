@@ -5,6 +5,7 @@ import com.berry.DTO.LoginDTO;
 import com.berry.dao.LoginRepo;
 import com.berry.exception.BadParameterException;
 import com.berry.exception.CreationException;
+import com.berry.exception.DatabaseExeption;
 import com.berry.exception.NotFoundException;
 import com.berry.model.Users;
 
@@ -19,7 +20,7 @@ public class LoginService {
 		this.loginRepo = new LoginRepo();
 	}
 	
-	public Users registerUser(CreateUserDTO createUserDTO) throws BadParameterException, CreationException {
+	public Users registerUser(CreateUserDTO createUserDTO) throws BadParameterException, CreationException, DatabaseExeption {
 		Users user = null;
 		
 		if (createUserDTO.noFieldEmpty() == false) {
@@ -31,7 +32,7 @@ public class LoginService {
 		return user;
 	}
 
-	public Users loginUser(LoginDTO loginDTO) throws BadParameterException, NotFoundException {
+	public Users loginUser(LoginDTO loginDTO) throws BadParameterException, NotFoundException, DatabaseExeption {
 		Users user = null;
 		
 		if (loginDTO.noFieldEmpty() == false) {

@@ -1,5 +1,9 @@
 package com.berry.util;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.berry.app.Application;
+import com.berry.exception.DatabaseExeption;
 import com.berry.model.Role;
 import com.berry.model.RoleEnum;
 import com.berry.model.Status;
@@ -78,7 +83,12 @@ public class PopulateTables {
 		admin.setFirst_name("root");
 		admin.setLast_name("root");
 		admin.setUsername("root");
-		admin.setPassword("root");			
+		try {
+			admin.setPassword(hashPassword("root"));
+		} catch (DatabaseExeption e) {
+			e.printStackTrace();
+			logger.error("Uh Oh.");
+		}			
 		Role rootAdminRole = session.load(Role.class, RoleEnum.MANAGER.getIndex());
 		admin.setRole_id(rootAdminRole);
 		
@@ -89,5 +99,23 @@ public class PopulateTables {
 		//Goodbye
 		session.getTransaction().commit();
 		session.close();
-	}	
+	}
+	
+	private static String hashPassword(String s) throws DatabaseExeption {
+		String hashed = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(s.getBytes(StandardCharsets.UTF_8));
+			byte[] digest = md.digest();
+			hashed = String.format("%064x", new BigInteger(1, digest));
+		} catch (NoSuchAlgorithmException e) {
+			throw new DatabaseExeption(e.getMessage());
+		}
+		
+		if (hashed == null) {
+			throw new DatabaseExeption("Password Encryption Error");
+		}
+		
+		return hashed;
+	}
 }
