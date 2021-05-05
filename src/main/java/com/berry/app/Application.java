@@ -30,9 +30,10 @@ public class Application {
 			System.exit(-1);
 		}
 		
-		app = Javalin.create(); //config -> {;
-//			config.addStaticFiles("/static");
-//		});
+		app = Javalin.create( config -> {;
+			config.addStaticFiles("/static");
+			config.addSinglePageRoot("/", "/static/index.html");
+		});
 		
 		app.before(ctx -> {
 			String URI = ctx.req.getRequestURI();
