@@ -3,6 +3,7 @@ package com.berry.util;
 import java.io.File;
 import java.io.IOException;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.ini4j.InvalidFileFormatException;
@@ -20,7 +21,7 @@ public class SessionUtility {
 	
 	private static SessionFactory sessionFactory;
 
-	public synchronized static SessionFactory getSession() {
+	public synchronized static Session getSession() {
 		if (sessionFactory == null) {
 			getCreds();
 			sessionFactory = new Configuration()
@@ -30,7 +31,7 @@ public class SessionUtility {
 					.configure("hibernate.cfg.xml").buildSessionFactory();
 		}
 
-		return sessionFactory;
+		return sessionFactory.openSession();
 	}
 	
 	private static void getCreds() {

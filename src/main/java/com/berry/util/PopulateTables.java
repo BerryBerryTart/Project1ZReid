@@ -26,7 +26,7 @@ public class PopulateTables {
 	private PopulateTables() {}
 	
 	public static void populate(){
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		session.beginTransaction();
 		
 		List<Role> roles = new ArrayList<Role>();

@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.persistence.NoResultException;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,16 +26,16 @@ public class LoginRepo {
 	private static Logger logger = LoggerFactory.getLogger(Application.class);
 	
 	public Users createUser(CreateUserDTO createUserDTO) throws CreationException, DatabaseExeption {
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		Users user = null;
 		boolean userExistsAlready = true;
 		
 		String hql = "FROM Users u WHERE u.username = :username AND u.email = :email";
 		try {
-			user = (Users) session.createQuery(hql)
-				.setParameter("username", createUserDTO.getUsername())
-				.setParameter("email", createUserDTO.getEmail())
-				.getSingleResult();
+			Query query = session.createQuery(hql);
+			query.setParameter("username", createUserDTO.getUsername());
+			query.setParameter("email", createUserDTO.getEmail());
+			user = (Users) query.getSingleResult();
 		} catch (NoResultException e) {
 			userExistsAlready = false;
 		}
@@ -57,27 +58,32 @@ public class LoginRepo {
 		session.save(user);
 		
 		session.getTransaction().commit();
-		session.close();
+		
+		if (session != null) {
+			session.close();
+		}
 		
 		return user;
 	}
 
 	public Users loginUser(LoginDTO loginDTO) throws NotFoundException, DatabaseExeption {
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		
 		Users user = null;
 		String hql = "FROM Users u WHERE u.username = :username AND u.password = :password";
 		
 		try {
-			user = (Users) session.createQuery(hql)
-				.setParameter("username", loginDTO.getUsername())
-				.setParameter("password", hashPassword(loginDTO.getPassword()))
-				.getSingleResult();
+			Query query = session.createQuery(hql);
+			query.setParameter("username", loginDTO.getUsername());
+			query.setParameter("password", hashPassword(loginDTO.getPassword()));
+			user = (Users) query.getSingleResult();		
 		} catch (NoResultException e) {
 			logger.error("User DNE");
 			throw new NotFoundException("User Not Found");
 		} finally {
-			session.close();
+			if (session != null) {
+				session.close();
+			}			
 		}
 		
 		return user;

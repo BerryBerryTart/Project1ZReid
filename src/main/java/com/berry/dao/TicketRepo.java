@@ -48,7 +48,7 @@ public class TicketRepo {
 			throw new ImproperTypeException("Invalid Receipt File Type");
 		}
 		
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		session.beginTransaction();
 		
 		Reimbursement ticket = new Reimbursement();
@@ -77,7 +77,7 @@ public class TicketRepo {
 	}
 
 	public Reimbursement getUserTicketById(Users user, int id) throws NotFoundException {
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		
 		Reimbursement ticket = new Reimbursement();
 		String hql = "FROM Reimbursement r WHERE r.author_id = :authorid AND r.reimb_id = :reimbid";
@@ -98,7 +98,7 @@ public class TicketRepo {
 
 	public List<Reimbursement> getAllUserTickets(Users user) throws NotFoundException {
 		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		
 		String hql = "FROM Reimbursement r WHERE r.author_id = :authorid";
 		
@@ -115,7 +115,7 @@ public class TicketRepo {
 
 	public List<Reimbursement> getAllAdminTickets() {
 		List<Reimbursement> tickets = new ArrayList<Reimbursement>();
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		
 		String hql = "FROM Reimbursement r";
 		
@@ -125,7 +125,7 @@ public class TicketRepo {
 	}
 
 	public Reimbursement getAdminTicketById(int id) throws NotFoundException {
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		
 		Reimbursement ticket = new Reimbursement();
 		String hql = "FROM Reimbursement r WHERE r.reimb_id = :reimbid";
@@ -144,7 +144,7 @@ public class TicketRepo {
 	}
 
 	public Reimbursement updateAdminTicketById(int id, Users user, TicketStatusDTO ticketStatusDTO) throws NotFoundException {
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		session.beginTransaction();
 		
 		Reimbursement ticket = new Reimbursement();
@@ -174,7 +174,7 @@ public class TicketRepo {
 
 	public byte[] fetchTicketBlob(Users user, int id) throws NotFoundException {
 		byte[] ticketBlob = null;
-		Session session = SessionUtility.getSession().openSession();
+		Session session = SessionUtility.getSession();
 		
 		String hql = "SELECT r.receipt from Reimbursement r WHERE r.reimb_id = :reimbid";
 		
