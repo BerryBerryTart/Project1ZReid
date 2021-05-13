@@ -22,8 +22,9 @@ public enum TypeEnum {
 			case "relocation":
 				returnType = RELOCATION;
 				break;
-			default:
-				return OTHER;
+			case "other":
+				returnType = OTHER;
+				break;
 		}		
 		return returnType;
 	}

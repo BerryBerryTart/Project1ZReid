@@ -1,5 +1,8 @@
 package com.berry.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +14,8 @@ import com.berry.exception.ImproperTypeException;
 import com.berry.exception.NotFoundException;
 import com.berry.exception.ServiceLayerException;
 import com.berry.model.Reimbursement;
+import com.berry.model.StatusEnum;
+import com.berry.model.TypeEnum;
 import com.berry.model.Users;
 
 public class TicketService {
@@ -20,11 +25,37 @@ public class TicketService {
 		this.ticketRepo = new TicketRepo();
 	}
 	
+	public TicketService(TicketRepo ticketRepo) {
+		this.ticketRepo = ticketRepo;
+	}
+	
 	public Reimbursement CreateTicket(Users user, CreateTicketDTO createTicketDTO) throws BadParameterException, ServiceLayerException, ImproperTypeException {
 		Reimbursement ticket = null;
 		
+		//check DTO has all fields
 		if (createTicketDTO.noFieldEmpty() == false) {
 			throw new BadParameterException("All Fields Are Required");
+		}
+		
+		//CHECK if receipt is a valid file type
+		String contentType = null;
+		try {
+			contentType = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(createTicketDTO.getReceipt()));
+		} catch (IOException e1) {
+			throw new ImproperTypeException(e1.getMessage());
+		}
+		
+		if (contentType == null ) {
+			throw new ImproperTypeException("No File Provided");			
+		} else if (contentType.equals("image/gif") || contentType.equals("image/jpeg") || contentType.equals("image/png")){
+			
+		} else {
+			throw new ImproperTypeException("Invalid Receipt File Type");
+		}
+		
+		//Check if type is valid
+		if (TypeEnum.getEnum(createTicketDTO.getType()) == null) {
+			throw new BadParameterException("Type Not Valid");
 		}
 		
 		ticket = ticketRepo.createTicket(user, createTicketDTO);
@@ -88,11 +119,18 @@ public class TicketService {
 
 	public Reimbursement updateAdminTicketById(String stringTicketID, Users user, TicketStatusDTO ticketStatusDTO) throws BadParameterException, ServiceLayerException, NotFoundException {
 		Reimbursement ticket = null;
+		
+		//All fields are filled check
 		if (ticketStatusDTO.noFieldEmpty() == false) {
 			throw new BadParameterException("All Fields Are Required");
-		} else if (ticketStatusDTO.fieldsAreValid() == false) {
+		} 
+		
+		//query status is valid check
+		if (!ticketStatusDTO.getStatus().toUpperCase().equals(StatusEnum.COMPLETED.toString()) 
+				|| !ticketStatusDTO.getStatus().toUpperCase().equals(StatusEnum.REJECTED.toString())) {
 			throw new BadParameterException("'" + ticketStatusDTO.getStatus() + "' Is Not A Valid Status");
 		}
+		
 		try {
 			int id = Integer.parseInt(stringTicketID);
 			ticket = ticketRepo.updateAdminTicketById(id, user, ticketStatusDTO);

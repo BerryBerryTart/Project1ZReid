@@ -1,8 +1,5 @@
 package com.berry.dao;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.berry.DTO.CreateTicketDTO;
 import com.berry.DTO.TicketStatusDTO;
 import com.berry.app.Application;
-import com.berry.exception.ImproperTypeException;
 import com.berry.exception.NotFoundException;
 import com.berry.model.Reimbursement;
 import com.berry.model.Status;
@@ -29,25 +25,7 @@ import com.berry.util.SessionUtility;
 public class TicketRepo {
 	private static Logger logger = LoggerFactory.getLogger(Application.class);
 	
-	public Reimbursement createTicket(Users user, CreateTicketDTO createTicketDTO) throws ImproperTypeException {
-		//FIRST check if receipt is a valid file type
-		String contentType = null;
-		try {
-			contentType = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(createTicketDTO.getReceipt()));
-		} catch (IOException e1) {
-			throw new ImproperTypeException(e1.getMessage());
-		}
-		
-		if (contentType == null ) {
-			logger.error("File Was Null");
-			throw new ImproperTypeException("No File Provided");			
-		} else if (contentType.equals("image/gif") || contentType.equals("image/jpeg") || contentType.equals("image/png")){
-			
-		} else {
-			logger.error("User Gave Illegal File Type");
-			throw new ImproperTypeException("Invalid Receipt File Type");
-		}
-		
+	public Reimbursement createTicket(Users user, CreateTicketDTO createTicketDTO){
 		Session session = SessionUtility.getSession();
 		session.beginTransaction();
 		

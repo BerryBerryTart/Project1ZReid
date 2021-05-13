@@ -1,3 +1,4 @@
+package com.test.login;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -37,7 +38,7 @@ public class testLoginServiceLogin {
 	}
 	
 	@Before
-	public void beforeTest() {
+	public void beforeTest() throws Exception {
 		loginService = new LoginService(mockLoginRepo);
 	}
 
