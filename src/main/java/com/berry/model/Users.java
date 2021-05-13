@@ -125,6 +125,7 @@ public class Users {
 		result = prime * result + ((first_name == null) ? 0 : first_name.hashCode());
 		result = prime * result + ((last_name == null) ? 0 : last_name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((role_id == null) ? 0 : role_id.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -157,6 +158,11 @@ public class Users {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
+			return false;
+		if (role_id == null) {
+			if (other.role_id != null)
+				return false;
+		} else if (!role_id.equals(other.role_id))
 			return false;
 		if (username == null) {
 			if (other.username != null)

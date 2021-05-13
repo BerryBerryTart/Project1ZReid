@@ -53,4 +53,34 @@ public class testLoginServiceLogin {
 			assertEquals(expected, actual);
 		}
 	}
+	
+	@Test(expected = BadParameterException.class)
+	public void testLoginNoUsername() throws BadParameterException, NotFoundException, DatabaseExeption {
+		try (MockedStatic<SessionUtility> mockedSessionUtil = mockStatic(SessionUtility.class)) {
+			mockedSessionUtil.when(SessionUtility::getSession).thenReturn(mockSession);
+			
+			LoginDTO dto = new LoginDTO("bill1", "");			
+			loginService.loginUser(dto);
+		}
+	}
+	
+	@Test(expected = BadParameterException.class)
+	public void testLoginNoPassword() throws BadParameterException, NotFoundException, DatabaseExeption {
+		try (MockedStatic<SessionUtility> mockedSessionUtil = mockStatic(SessionUtility.class)) {
+			mockedSessionUtil.when(SessionUtility::getSession).thenReturn(mockSession);
+			
+			LoginDTO dto = new LoginDTO("", "bill1");			
+			loginService.loginUser(dto);
+		}
+	}
+	
+	@Test(expected = BadParameterException.class)
+	public void testLoginAllEmptyParams() throws BadParameterException, NotFoundException, DatabaseExeption {
+		try (MockedStatic<SessionUtility> mockedSessionUtil = mockStatic(SessionUtility.class)) {
+			mockedSessionUtil.when(SessionUtility::getSession).thenReturn(mockSession);
+			
+			LoginDTO dto = new LoginDTO("", "");			
+			loginService.loginUser(dto);
+		}
+	}
 }
