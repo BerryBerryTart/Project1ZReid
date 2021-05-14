@@ -12,6 +12,10 @@
 		<sonar.projectKey>BerryBerryTart_Project1ZReid</sonar.projectKey>
 		<sonar.organization>berryberrytart</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		
+		<!-- This is something we added ourselves for Jacoco to provide Code Coverage reports -->
+		<!-- Jacoco is a Maven plugin that will be triggered when we do a Sonarcloud scan -->
+		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/io.javalin/javalin -->
