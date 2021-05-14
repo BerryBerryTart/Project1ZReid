@@ -46,13 +46,13 @@ public class testTicketServiceCreateTicket {
 		dto1.setAmount(500.30);
 		dto1.setDescription("Description");
 		dto1.setType(TypeEnum.BUISNESS.toString());
-		dto1.setReceipt(base64toByteArray(blobString));
+		dto1.setReceipt(Base64Conversion.base64toByteArray(blobString));
 		
 		Reimbursement ticket1 = new Reimbursement();
 		ticket1.setAmount(500.30);
 		ticket1.setDescription("Description");
 		ticket1.setType_id(new Type(TypeEnum.BUISNESS.getIndex(), TypeEnum.BUISNESS.toString()));
-		ticket1.setReceipt(base64toByteArray(blobString));
+		ticket1.setReceipt(Base64Conversion.base64toByteArray(blobString));
 		
 		when(mockTicketRepo.createTicket( eq(user1) ,  eq(dto1) )).thenReturn(ticket1);
 		
@@ -61,13 +61,13 @@ public class testTicketServiceCreateTicket {
 		dto2.setAmount(500.30);
 		dto2.setDescription("Description");
 		dto2.setType(TypeEnum.BUISNESS.toString());
-		dto2.setReceipt(base64toByteArray("ZWNobyBvZmYgfCBjbGlw"));
+		dto2.setReceipt(Base64Conversion.base64toByteArray("ZWNobyBvZmYgfCBjbGlw"));
 		
 		Reimbursement ticket2 = new Reimbursement();
 		ticket2.setAmount(500.30);
 		ticket2.setDescription("Description");
 		ticket2.setType_id(new Type(TypeEnum.BUISNESS.getIndex(), TypeEnum.BUISNESS.toString()));
-		ticket2.setReceipt(base64toByteArray("ZWNobyBvZmYgfCBjbGlw"));
+		ticket2.setReceipt(Base64Conversion.base64toByteArray("ZWNobyBvZmYgfCBjbGlw"));
 		
 		when(mockTicketRepo.createTicket( eq(user1) ,  eq(dto2) )).thenReturn(ticket2);
 		
@@ -87,13 +87,13 @@ public class testTicketServiceCreateTicket {
 			dto.setAmount(500.30);
 			dto.setDescription("Description");
 			dto.setType(TypeEnum.BUISNESS.toString());
-			dto.setReceipt(base64toByteArray(blobString));
+			dto.setReceipt(Base64Conversion.base64toByteArray(blobString));
 			
 			Reimbursement expected = new Reimbursement();
 			expected.setAmount(500.30);
 			expected.setDescription("Description");
 			expected.setType_id(new Type(TypeEnum.BUISNESS.getIndex(), TypeEnum.BUISNESS.toString()));
-			expected.setReceipt(base64toByteArray(blobString));
+			expected.setReceipt(Base64Conversion.base64toByteArray(blobString));
 			
 			Reimbursement actual = ticketService.CreateTicket(user1, dto);
 			
@@ -110,7 +110,7 @@ public class testTicketServiceCreateTicket {
 			dto.setAmount(500.30);
 			dto.setDescription("Description");
 			dto.setType(TypeEnum.BUISNESS.toString());
-			dto.setReceipt(base64toByteArray("ZWNobyBvZmYgfCBjbGlw"));
+			dto.setReceipt(Base64Conversion.base64toByteArray("ZWNobyBvZmYgfCBjbGlw"));
 			
 			ticketService.CreateTicket(user1, dto);;
 		}
@@ -125,7 +125,7 @@ public class testTicketServiceCreateTicket {
 			CreateTicketDTO dto = new CreateTicketDTO();
 			dto.setDescription("Description");
 			dto.setType(TypeEnum.BUISNESS.toString());
-			dto.setReceipt(base64toByteArray(blobString));
+			dto.setReceipt(Base64Conversion.base64toByteArray(blobString));
 			ticketService.CreateTicket(user1, dto);
 		}
 	}
@@ -138,7 +138,7 @@ public class testTicketServiceCreateTicket {
 			CreateTicketDTO dto = new CreateTicketDTO();
 			dto.setAmount(500.30);
 			dto.setType(TypeEnum.BUISNESS.toString());
-			dto.setReceipt(base64toByteArray(blobString));
+			dto.setReceipt(Base64Conversion.base64toByteArray(blobString));
 			
 			ticketService.CreateTicket(user1, dto);			
 		}
@@ -152,7 +152,7 @@ public class testTicketServiceCreateTicket {
 			CreateTicketDTO dto = new CreateTicketDTO();
 			dto.setAmount(500.30);
 			dto.setDescription("Description");
-			dto.setReceipt(base64toByteArray(blobString));
+			dto.setReceipt(Base64Conversion.base64toByteArray(blobString));
 			
 			ticketService.CreateTicket(user1, dto);			
 		}
@@ -183,19 +183,9 @@ public class testTicketServiceCreateTicket {
 			dto.setAmount(500.30);
 			dto.setDescription("Description");
 			dto.setType("wrong");
-			dto.setReceipt(base64toByteArray(blobString));
+			dto.setReceipt(Base64Conversion.base64toByteArray(blobString));
 			
 			ticketService.CreateTicket(user1, dto);			
 		}
 	}
-	
-	//helper method for creating base 64 byte arrays
-	private static byte[] base64toByteArray(String base64String) {
-		byte[] arr = null;
-		
-		arr = Base64.getDecoder().decode(base64String.getBytes());
-		
-		return arr;
-	}
-
 }

@@ -127,7 +127,7 @@ public class TicketService {
 		
 		//query status is valid check
 		if (!ticketStatusDTO.getStatus().toUpperCase().equals(StatusEnum.COMPLETED.toString()) 
-				|| !ticketStatusDTO.getStatus().toUpperCase().equals(StatusEnum.REJECTED.toString())) {
+				&& !ticketStatusDTO.getStatus().toUpperCase().equals(StatusEnum.REJECTED.toString())) {
 			throw new BadParameterException("'" + ticketStatusDTO.getStatus() + "' Is Not A Valid Status");
 		}
 		
@@ -155,8 +155,5 @@ public class TicketService {
 		}
 		
 		return ticketBlob;
-	}
-	
-	
-	
+	}	
 }
