@@ -2,6 +2,9 @@
 
 ### Written by Zuberi Reid
 
+### Frontend Repository
+[Github Repository](https://github.com/BerryBerryTart/project1frontend)
+
 ## Project Description
 This is a basic app allows employees to submit reimbursment tickets. It also allows company managers to approve / deny and even view all tickets.
 
